@@ -3,6 +3,7 @@ package jp.techacademy.sachio.suenaga.jumpactiongame;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -167,6 +168,9 @@ public class GameScreen extends ScreenAdapter {
         Texture playerTexture = new Texture("uma.png");
         Texture ufoTexture = new Texture("ufo.png");
 
+        //サウンドの準備
+        Sound sound = Gdx.audio.newSound(Gdx.files.internal("Sound/punch-middle2.mp3"));
+
         // StepとStarをゴールの高さまで配置していく
         float y = 0;
 
@@ -261,6 +265,7 @@ public class GameScreen extends ScreenAdapter {
             mGameState = GAME_STATE_GAMEOVER;
         }
     }
+
     private void checkCollision() {
         // UFO(ゴールとの当たり判定)
         if (mPlayer.getBoundingRectangle().overlaps(mUfo.getBoundingRectangle())) {
@@ -277,7 +282,10 @@ public class GameScreen extends ScreenAdapter {
             }
 
             if (mPlayer.getBoundingRectangle().overlaps(enemy.getBoundingRectangle())) {
+                sound.play(1.0f);
                 mGameState = GAME_STATE_GAMEOVER;
+            }
+        }
 
         // Starとの当たり判定
         for (int i = 0; i < mStars.size(); i++) {
