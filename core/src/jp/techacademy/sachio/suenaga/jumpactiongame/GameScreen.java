@@ -48,6 +48,7 @@ public class GameScreen extends ScreenAdapter {
     List<Enemy> mEnemy;
     Ufo mUfo;
     Player mPlayer;
+    Sound mSound;
 
     float mHeightSoFar; // ←追加する
     int mGameState;
@@ -66,6 +67,9 @@ public class GameScreen extends ScreenAdapter {
         mBg = new Sprite(new TextureRegion(bgTexture, 0, 0, 540, 810));
         mBg.setSize(CAMERA_WIDTH, CAMERA_HEIGHT);
         mBg.setPosition(0, 0);
+
+        //サウンドの準備
+        mSound = Gdx.audio.newSound(Gdx.files.internal("Sound/punch-middle2.mp3"));
 
         // カメラ、ViewPortを生成、設定する
         mCamera = new OrthographicCamera();
@@ -88,6 +92,7 @@ public class GameScreen extends ScreenAdapter {
         mFont.getData().setScale(0.8f);
         mScore = 0;
         mHighScore = 0;
+        mSound = Gdx.audio.newSound(Gdx.files.internal("Sound/punch-middle2.mp3"));
 
         mPrefs = Gdx.app.getPreferences("jp.techacademy.taro.kirameki.jumpactiongame"); // ←追加する
         mHighScore = mPrefs.getInteger("HIGHSCORE", 0); // ←追加する
@@ -167,9 +172,6 @@ public class GameScreen extends ScreenAdapter {
         Texture enemyTexture = new Texture("nigaoe_shimadu_hisamitsu.png");
         Texture playerTexture = new Texture("uma.png");
         Texture ufoTexture = new Texture("ufo.png");
-
-        //サウンドの準備
-        Sound sound = Gdx.audio.newSound(Gdx.files.internal("Sound/punch-middle2.mp3"));
 
         // StepとStarをゴールの高さまで配置していく
         float y = 0;
@@ -282,7 +284,7 @@ public class GameScreen extends ScreenAdapter {
             }
 
             if (mPlayer.getBoundingRectangle().overlaps(enemy.getBoundingRectangle())) {
-                sound.play(1.0f);
+                mSound.play(1.0f);
                 mGameState = GAME_STATE_GAMEOVER;
             }
         }
